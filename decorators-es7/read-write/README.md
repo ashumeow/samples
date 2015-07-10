@@ -4,6 +4,8 @@ This is [an ES7 decorator](https://github.com/wycats/javascript-decorators) (ver
 
 It will also throw warnings if you call [layout-triggering methods or properties](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html) during a `@write` block, or mutate the DOM during a `@read` block.
 
+**Note: the code's execution order is changed in the process.**
+
 ## Usage
 
 Typically if you interleave reads and writes, like the code below, you can trigger [layout thrashing](http://wilsonpage.co.uk/preventing-layout-thrashing/):
@@ -102,10 +104,18 @@ There's a gulpfile, which will use Babelify to convert the ES6 and ES7 (the deco
 
 ```
 npm install
-gulp
+npm run dev
 ```
 
 Then load the `index.html` file inside of `dist/`.
+
+If you want to disable the warnings, which you probably would for a production environment, you should run:
+
+```
+npm run prod
+```
+
+This uses [envify](https://github.com/hughsk/envify/) to effectively `#ifdef` out the warnings. Uglify should remove the dead code by virtue of it being unreachable.
 
 ## TODOs
 
@@ -114,5 +124,8 @@ Then load the `index.html` file inside of `dist/`.
  - [ ] Allow scoping of mutations, e.g. `@read('.main')`.
  - [ ] Allow strict mode (throw errors over warnings).
  - [ ] Write tests for all available properties.
+ - [ ] Ensure all read / write properties are accounted for.
+ - [ ] Recovery for failed tasks in the schedule
+ - [X] Noop mode for DOMManager
 
 Author: [@aerotwist](https://twitter.com/aerotwist)
